@@ -1,3 +1,4 @@
+import javax.crypto.SealedObject;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -32,6 +33,10 @@ public class Hibernate {
         {
             Account admin=new Account("admin","admin");
             teacherAccounts.add(admin);
+            Account minh=new Account("minh","minh");
+            teacherAccounts.add(minh);
+            Account tu=new Account("tu","tu");
+            teacherAccounts.add(tu);
         }
         if(teacherList.size()==0)
         {
@@ -39,6 +44,14 @@ public class Hibernate {
             admin.setUsername("admin");
             admin.setPassword("admin");
             teacherList.add(admin);
+            Teacher minh=new Teacher();
+            admin.setUsername("minh");
+            admin.setPassword("minh");
+            teacherList.add(minh);
+            Teacher tu=new Teacher();
+            admin.setUsername("tu");
+            admin.setPassword("tu");
+            teacherList.add(tu);
         }
         JFrame jFrame=new MyFrame();
         JLabel jLabel=new JLabel("LOGIN FORM");
@@ -74,6 +87,8 @@ public class Hibernate {
         Vector<Teacher> finalTeacherList1 = teacherList;
         Vector<Teacher> finalTeacherList2 = teacherList;
         Vector<Account> finalTeacherAccounts = teacherAccounts;
+        Vector<Account> finalTeacherAccounts1 = teacherAccounts;
+        Vector<Account> finalTeacherAccounts2 = teacherAccounts;
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -290,6 +305,142 @@ public class Hibernate {
                                     }
                                 }
                             });
+                            JButton DanhSach=new JButton("Danh sách account GV");
+                            mainPanel.add(DanhSach);
+                            DanhSach.setIcon(new ImageIcon("list.png"));
+                            DanhSach.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    JFrame listFrame=new JFrame();
+                                    listFrame.setTitle("Danh sách account GV");
+                                    listFrame.setIconImage(new ImageIcon("list.png").getImage());
+                                    listFrame.setSize(700,700);
+                                    listFrame.setVisible(true);
+                                    JButton Search=new JButton("Search");
+                                    Search.setIcon(new ImageIcon("lupe.png"));
+                                    BorderLayout borderLayout1=new BorderLayout();
+                                    listFrame.setLayout(borderLayout1);
+                                    JPanel centerPanel=new JPanel();
+                                    JLabel listlabel=new JLabel("List Accounts");
+                                    listlabel.setHorizontalAlignment(0);
+                                    Vector Header=new Vector();
+                                    Header.add("Username");
+                                    Header.add("Password");
+                                    Vector data=new Vector();
+                                    for(int ii = 0; ii< finalTeacherAccounts1.size(); ii++)
+                                    {
+                                        Vector temp=new Vector();
+                                        temp.add(finalTeacherAccounts1.get(ii).getKey());
+                                        temp.add(finalTeacherAccounts1.get(ii).getValue());
+                                        data.add(temp);
+                                    }
+                                    JTable table=new JTable(data,Header);
+                                    JScrollPane sp=new JScrollPane(table);
+                                    Search.addActionListener(new ActionListener() {
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            if(e.getSource()==Search)
+                                            {
+                                                JFrame temp=new JFrame();
+                                                temp.setSize(300,300);
+                                                temp.setVisible(true);
+                                                temp.setIconImage(new ImageIcon("lupe.png").getImage());
+                                                temp.setTitle("Search");
+                                                JPanel panel=new JPanel();
+                                                JLabel label=new JLabel("Username:");
+                                                panel.setLayout(new FlowLayout());
+                                                JTextField jTextField=new JTextField();
+                                                jTextField.setPreferredSize(new Dimension(300,30));
+                                                panel.add(label);
+                                                panel.add(jTextField);
+                                                JPanel bigPanel=new JPanel();
+                                                bigPanel.add(panel);
+                                                JButton but=new JButton("Search");
+                                                but.addActionListener(new ActionListener() {
+                                                    @Override
+                                                    public void actionPerformed(ActionEvent e) {
+                                                        if(e.getSource()==but)
+                                                        {
+                                                            String name=jTextField.getText();
+                                                            boolean check=false;
+                                                            for(int i = 0; i< finalTeacherAccounts2.size(); i++)
+                                                            {
+                                                                if(name.equals(finalTeacherAccounts2.get(i).getKey()))
+                                                                {
+                                                                    check=true;
+                                                                    Vector DuLieu=new Vector();
+                                                                    Vector acc=new Vector();
+                                                                    acc.add(finalTeacherAccounts2.get(i).getKey());
+                                                                    acc.add(finalTeacherAccounts2.get(i).getValue());
+                                                                    DuLieu.add(acc);
+                                                                    table.setModel(new DefaultTableModel(DuLieu,Header));
+                                                                    break;
+                                                                }
+                                                            }
+                                                            if(check==false)
+                                                            {
+                                                                JOptionPane.showMessageDialog(null,"Không tìm thấy account!");
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                                bigPanel.add(but);
+                                                temp.add(bigPanel);
+                                                temp.pack();
+                                            }
+                                        }
+                                    });
+                                    JButton add=new JButton("Add");
+                                    add.setIcon(new ImageIcon("rsz_add.png"));
+                                    add.addActionListener(new ActionListener() {
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            if(e.getSource()==add)
+                                            {
+                                                JFrame Temp=new JFrame();
+                                                Temp.setSize(300,300);
+                                                Temp.setVisible(true);
+                                                Temp.setIconImage(new ImageIcon("rsz_add.png").getImage());
+                                                Temp.setTitle("Add");
+                                                JPanel Jpanel=new JPanel();
+                                                JLabel Jlabel=new JLabel("Username:");
+                                                Jpanel.setLayout(new FlowLayout());
+                                                JTextField JtextField=new JTextField();
+                                                JtextField.setPreferredSize(new Dimension(300,30));
+                                                Jpanel.add(Jlabel);
+                                                Jpanel.add(JtextField);
+                                                JPanel Jpanel1=new JPanel();
+                                                JLabel Jlabel1=new JLabel("Password:");
+                                                Jpanel1.setLayout(new FlowLayout());
+                                                JTextField JtextField1=new JTextField();
+                                                JtextField1.setPreferredSize(new Dimension(300,30));
+                                                Jpanel1.add(Jlabel1);
+                                                Jpanel1.add(JtextField1);
+                                                JPanel BPanel=new JPanel();
+                                                BoxLayout boxLayout1=new BoxLayout(BPanel,BoxLayout.Y_AXIS);
+                                                BPanel.setLayout(boxLayout1);
+                                                BPanel.add(Jpanel);
+                                                BPanel.add(Jpanel1);
+                                                JButton Them=new JButton("Thêm");
+                                                BPanel.add(Them);
+                                                Temp.setResizable(false);
+                                                Temp.add(BPanel);
+                                                Temp.pack();
+                                            }
+                                        }
+                                    });
+                                    JPanel southPanel=new JPanel();
+                                    southPanel.add(Search);
+                                    southPanel.add(add);
+                                    centerPanel.add(sp);
+                                    listFrame.add(listlabel,BorderLayout.NORTH);
+                                    listFrame.add(centerPanel,BorderLayout.CENTER);
+                                    listFrame.add(southPanel,BorderLayout.SOUTH);
+                                    listFrame.pack();
+                                }
+                            });
+
+
                             JButton changePass=new JButton("Đổi mật khẩu");
                             mainPanel.add(changePass);
                             ImageIcon useraccount=new ImageIcon("user.png");
