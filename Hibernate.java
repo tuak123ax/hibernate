@@ -20,6 +20,7 @@ public class Hibernate {
     public static void main(String[]args) throws IOException, ClassNotFoundException {
         Vector<Account>teacherAccounts=new Vector<>();
         Vector<HocSinh>stdList=new Vector<>();
+        Vector<Subject>sbjList=new Vector<>();
         Vector teacherList=new Vector();
         if(FileSize("DuLieu.txt")!=0)
         {
@@ -28,6 +29,10 @@ public class Hibernate {
         if(FileSize("DuLieuAccount.txt")!=0)
         {
             teacherAccounts=DocFile2(teacherAccounts);
+        }
+        if(FileSize("DuLieuMonHoc.txt")!=0)
+        {
+            sbjList=DocFileMonHoc(sbjList);
         }
         if(teacherAccounts.size()==0)
         {
@@ -52,6 +57,24 @@ public class Hibernate {
             tu.setUsername("tu");
             tu.setPassword("tu");
             teacherList.add(tu);
+        }
+        if(sbjList.size()==0)
+        {
+            Subject math=new Subject();
+            math.setMaMH("M001");
+            math.setTenMH("Toán tổ hợp");
+            math.setTinChi(4);
+            Subject Physics=new Subject();
+            Physics.setMaMH("PHY001");
+            Physics.setTenMH("Lý 2");
+            Physics.setTinChi(3);
+            Subject programming=new Subject();
+            programming.setMaMH("PR001");
+            programming.setTenMH("Kỹ thuật lập trình");
+            programming.setTinChi(4);
+            sbjList.add(math);
+            sbjList.add(Physics);
+            sbjList.add(programming);
         }
         System.out.println(teacherAccounts.size());
         System.out.println(teacherList.size());
@@ -101,6 +124,12 @@ public class Hibernate {
         Vector<Account> finalTeacherAccounts5 = teacherAccounts;
         Vector finalTeacherList8 = teacherList;
         Vector<Account> finalTeacherAccounts6 = teacherAccounts;
+        Vector<Subject> finalSbjList = sbjList;
+        Vector<Subject> finalSbjList1 = sbjList;
+        Vector<Subject> finalSbjList2 = sbjList;
+        Vector<Subject> finalSbjList3 = sbjList;
+        Vector<Subject> finalSbjList4 = sbjList;
+        Vector<Subject> finalSbjList5 = sbjList;
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -131,7 +160,9 @@ public class Hibernate {
                             frame.setLayout(borderLayout);
                             JButton logout=new JButton("Sign out");
                             JPanel northPan=new JPanel();
+                            JLabel hello=new JLabel("Hello, "+user);
                             northPan.setLayout(new FlowLayout(FlowLayout.RIGHT));
+                            northPan.add(hello);
                             northPan.add(logout);
                             logout.addActionListener(new ActionListener() {
                                 @Override
@@ -509,8 +540,8 @@ public class Hibernate {
                                                 {
                                                     Teacher temp= (Teacher) finalTeacherList6.get(table.getSelectedRow());
                                                     JFrame jFrame1=new JFrame();
-                                                    jFrame1.setTitle("User account");
-                                                    ImageIcon Icon=new ImageIcon("user.png");
+                                                    jFrame1.setTitle("Update");
+                                                    ImageIcon Icon=new ImageIcon("update.png");
                                                     jFrame1.setIconImage(Icon.getImage());
                                                     jFrame1.setSize(520,450);
                                                     jFrame1.setResizable(false);
@@ -869,6 +900,365 @@ public class Hibernate {
                                     }
                                 }
                             });
+                            JButton Subject=new JButton("Subject");
+                            Subject.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    if(e.getSource()==Subject)
+                                    {
+                                        JFrame listFrame=new JFrame();
+                                        listFrame.setTitle("Danh sách môn học");
+                                        listFrame.setIconImage(new ImageIcon("subject.png").getImage());
+
+                                        listFrame.setSize(700,700);
+                                        listFrame.setVisible(true);
+                                        JButton Search=new JButton("Search");
+                                        Search.setIcon(new ImageIcon("lupe.png"));
+                                        BorderLayout borderLayout1=new BorderLayout();
+                                        listFrame.setLayout(borderLayout1);
+                                        JPanel centerPanel=new JPanel();
+                                        JLabel listlabel=new JLabel("List Subjects");
+                                        listlabel.setHorizontalAlignment(0);
+                                        Vector Header=new Vector();
+                                        Header.add("Mã môn học");
+                                        Header.add("Tên môn học");
+                                        Header.add("Số tín chỉ");
+                                        Vector data=new Vector();
+                                        for(int ii = 0; ii< finalSbjList.size(); ii++)
+                                        {
+                                            Vector temp=new Vector();
+                                            temp.add(finalSbjList.get(ii).getMaMH());
+                                            temp.add(finalSbjList.get(ii).getTenMH());
+                                            temp.add(finalSbjList.get(ii).getTinChi());
+                                            data.add(temp);
+                                        }
+                                        JTable table=new JTable(data,Header);
+                                        JScrollPane sp=new JScrollPane(table);
+                                        Search.addActionListener(new ActionListener() {
+                                            @Override
+                                            public void actionPerformed(ActionEvent e) {
+                                                if(e.getSource()==Search)
+                                                {
+                                                    JFrame temp=new JFrame();
+                                                    temp.setSize(300,300);
+                                                    temp.setVisible(true);
+                                                    temp.setIconImage(new ImageIcon("lupe.png").getImage());
+                                                    temp.setTitle("Search");
+                                                    JPanel panel=new JPanel();
+                                                    JLabel label=new JLabel("Tên môn học:");
+                                                    panel.setLayout(new FlowLayout());
+                                                    JTextField jTextField=new JTextField();
+                                                    jTextField.setPreferredSize(new Dimension(300,30));
+                                                    panel.add(label);
+                                                    panel.add(jTextField);
+                                                    JPanel bigPanel=new JPanel();
+                                                    bigPanel.add(panel);
+                                                    JButton but=new JButton("Search");
+                                                    but.addActionListener(new ActionListener() {
+                                                        @Override
+                                                        public void actionPerformed(ActionEvent e) {
+                                                            if(e.getSource()==but)
+                                                            {
+                                                                String name=jTextField.getText();
+                                                                boolean check=false;
+                                                                Vector DuLieu=new Vector();
+                                                                for(int i = 0; i< finalSbjList1.size(); i++)
+                                                                {
+                                                                    if(name.equals(finalSbjList1.get(i).getTenMH()))
+                                                                    {
+                                                                        check=true;
+                                                                        Vector acc=new Vector();
+                                                                        acc.add(finalSbjList1.get(i).getMaMH());
+                                                                        acc.add(finalSbjList1.get(i).getTenMH());
+                                                                        acc.add(finalSbjList1.get(i).getTinChi());
+                                                                        DuLieu.add(acc);
+                                                                    }
+                                                                }
+                                                                if(check==false)
+                                                                {
+                                                                    JOptionPane.showMessageDialog(null,"Không tìm thấy môn học!");
+                                                                }
+                                                                else
+                                                                {
+                                                                    table.setModel(new DefaultTableModel(DuLieu,Header));
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                    bigPanel.add(but);
+                                                    temp.add(bigPanel);
+                                                    temp.pack();
+                                                }
+                                            }
+                                        });
+                                        JButton add=new JButton("Add");
+                                        add.setIcon(new ImageIcon("rsz_add.png"));
+                                        add.addActionListener(new ActionListener() {
+                                            @Override
+                                            public void actionPerformed(ActionEvent e) {
+                                                if(e.getSource()==add)
+                                                {
+                                                    JFrame Temp=new JFrame();
+                                                    Temp.setSize(300,300);
+                                                    Temp.setVisible(true);
+                                                    Temp.setIconImage(new ImageIcon("rsz_add.png").getImage());
+                                                    Temp.setTitle("Add");
+                                                    JPanel Jpanel=new JPanel();
+                                                    JLabel Jlabel=new JLabel("Mã môn học:");
+                                                    Jpanel.setLayout(new FlowLayout());
+                                                    JTextField JtextField=new JTextField();
+                                                    JtextField.setPreferredSize(new Dimension(300,30));
+                                                    Jpanel.add(Jlabel);
+                                                    Jpanel.add(JtextField);
+                                                    JPanel Jpanel1=new JPanel();
+                                                    JLabel Jlabel1=new JLabel("Tên môn học:");
+                                                    Jpanel1.setLayout(new FlowLayout());
+                                                    JTextField JtextField1=new JTextField();
+                                                    JtextField1.setPreferredSize(new Dimension(300,30));
+                                                    Jpanel1.add(Jlabel1);
+                                                    Jpanel1.add(JtextField1);
+                                                    JPanel Jpanel2=new JPanel();
+                                                    JLabel Jlabel2=new JLabel("Số tín chỉ:");
+                                                    Jpanel2.setLayout(new FlowLayout());
+                                                    JTextField JtextField2=new JTextField();
+                                                    JtextField2.setPreferredSize(new Dimension(300,30));
+                                                    Jpanel2.add(Jlabel2);
+                                                    Jpanel2.add(JtextField2);
+                                                    JPanel BPanel=new JPanel();
+                                                    BoxLayout boxLayout1=new BoxLayout(BPanel,BoxLayout.Y_AXIS);
+                                                    BPanel.setLayout(boxLayout1);
+                                                    BPanel.add(Jpanel);
+                                                    BPanel.add(Jpanel1);
+                                                    BPanel.add(Jpanel2);
+                                                    JButton Them=new JButton("Thêm");
+                                                    Them.addActionListener(new ActionListener() {
+                                                        @Override
+                                                        public void actionPerformed(ActionEvent e) {
+                                                            if(e.getSource()==Them)
+                                                            {
+                                                                if(JtextField.getText().equals("")||JtextField1.getText().equals(""))
+                                                                {
+                                                                    JOptionPane.showMessageDialog(null,"Hãy nhập đầy đủ thông tin");
+                                                                }
+                                                                else
+                                                                {
+                                                                    String ma=JtextField.getText();
+                                                                    String ten=JtextField1.getText();
+                                                                    int tinchi=Integer.parseInt(JtextField2.getText());
+                                                                    boolean kt=false;
+                                                                    for(int jj = 0; jj< finalSbjList2.size(); jj++)
+                                                                    {
+                                                                        if(ma.equals(finalSbjList2.get(jj).getMaMH()))
+                                                                        {
+                                                                            kt=true;
+                                                                            JOptionPane.showMessageDialog(null,"Tài khoản đã tồn tại");
+                                                                        }
+                                                                    }
+                                                                    if(kt==false) {
+                                                                        Subject newSub = new Subject(ma,ten,tinchi);
+                                                                        finalSbjList2.add(newSub);
+                                                                        try {
+                                                                            LamTrangFile("DuLieuMonHoc.txt");
+                                                                            GhiFileMonHoc(finalSbjList2);
+                                                                            Vector dulieu = new Vector();
+                                                                            for (int iii = 0; iii < finalSbjList2.size(); iii++) {
+                                                                                Vector phu = new Vector();
+                                                                                phu.add(finalSbjList2.get(iii).getMaMH());
+                                                                                phu.add(finalSbjList2.get(iii).getTenMH());
+                                                                                phu.add(finalSbjList2.get(iii).getTinChi());
+                                                                                dulieu.add(phu);
+                                                                            }
+                                                                            table.setModel(new DefaultTableModel(dulieu, Header));
+                                                                        } catch (IOException ioException) {
+                                                                            ioException.printStackTrace();
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                    BPanel.add(Them);
+                                                    Temp.setResizable(false);
+                                                    Temp.add(BPanel);
+                                                    Temp.pack();
+                                                }
+                                            }
+                                        });
+                                        JButton Update=new JButton("Update");
+                                        Update.addActionListener(new ActionListener() {
+                                            @Override
+                                            public void actionPerformed(ActionEvent e) {
+                                                if(e.getSource()==Update)
+                                                {
+                                                    if(table.getSelectedRow()<0)
+                                                    {
+                                                        JOptionPane.showMessageDialog(null,"Hãy chọn đối tượng cần update!");
+                                                    }
+                                                    else
+                                                    {
+                                                        Subject temp= (Subject) finalSbjList3.get(table.getSelectedRow());
+                                                        JFrame jFrame1=new JFrame();
+                                                        jFrame1.setTitle("Update");
+                                                        ImageIcon Icon=new ImageIcon("update.png");
+                                                        jFrame1.setIconImage(Icon.getImage());
+                                                        jFrame1.setSize(520,450);
+                                                        jFrame1.setResizable(false);
+                                                        jFrame1.setVisible(true);
+                                                        JPanel panel=new JPanel();
+                                                        JLabel label1=new JLabel();
+                                                        label1.setText("Mã môn học:");
+                                                        JTextField textField=new JTextField();
+                                                        textField.setText(String.valueOf(temp.getMaMH()));
+                                                        if(textField.getText().equals("0"))
+                                                        {
+                                                            textField.setText("");
+                                                        }
+                                                        textField.setPreferredSize(new Dimension(500,30));
+                                                        panel.add(label1);
+                                                        panel.add(textField);
+                                                        JPanel panel1=new JPanel();
+                                                        JLabel label2=new JLabel();
+                                                        label2.setText("Tên môn học:");
+                                                        JTextField textField1=new JTextField();
+                                                        textField1.setText(temp.getTenMH());
+                                                        textField1.setPreferredSize(new Dimension(500,30));
+                                                        panel1.add(label2);
+                                                        panel1.add(textField1);
+                                                        JPanel panel2=new JPanel();
+                                                        JLabel label3=new JLabel();
+                                                        label3.setText("Số tín chỉ:");
+                                                        JTextField textField2=new JTextField();
+                                                        textField2.setText(String.valueOf(temp.getTinChi()));
+                                                        if(textField2.getText().equals("0"))
+                                                        {
+                                                            textField2.setText("");
+                                                        }
+                                                        textField2.setPreferredSize(new Dimension(500,30));
+                                                        panel2.add(label3);
+                                                        panel2.add(textField2);
+                                                        textField.setFocusable(false);
+                                                        textField1.setFocusable(false);
+                                                        textField2.setFocusable(false);
+                                                        JPanel mainPanel=new JPanel();
+                                                        BoxLayout boxLayout=new BoxLayout(mainPanel,BoxLayout.Y_AXIS);
+                                                        mainPanel.setLayout(boxLayout);
+                                                        mainPanel.add(panel);
+                                                        mainPanel.add(panel1);
+                                                        mainPanel.add(panel2);
+                                                        jFrame1.add(mainPanel);
+                                                        JPanel butPanel=new JPanel();
+                                                        JButton but1=new JButton("Sửa thông tin");
+                                                        but1.addActionListener(new ActionListener() {
+                                                            @Override
+                                                            public void actionPerformed(ActionEvent e) {
+                                                                if(e.getSource()==but1)
+                                                                {
+                                                                    textField.setFocusable(true);
+                                                                    textField1.setFocusable(true);
+                                                                    textField2.setFocusable(true);
+                                                                }
+                                                            }
+                                                        });
+                                                        JButton saveBut=new JButton("Lưu");
+                                                        saveBut.addActionListener(new ActionListener() {
+                                                            @Override
+                                                            public void actionPerformed(ActionEvent e) {
+                                                                if(e.getSource()==saveBut)
+                                                                {
+                                                                    if(textField.getText().equals("")||textField1.getText().equals("")||textField2.getText().equals("")
+                                                                    ) {
+                                                                        JOptionPane.showMessageDialog(null,"Hãy nhập đầy đủ thông tin!");
+                                                                    }
+                                                                    else{
+                                                                        JOptionPane.showMessageDialog(null,"Đã lưu lại thông tin!");
+                                                                        textField.setFocusable(false);
+                                                                        textField1.setFocusable(false);
+                                                                        textField2.setFocusable(false);
+                                                                        int pos=table.getSelectedRow();
+                                                                        finalSbjList3.remove(pos);
+                                                                        temp.setMaMH(textField.getText());
+                                                                        temp.setTenMH(textField1.getText());
+                                                                        temp.setTinChi(Integer.parseInt(textField2.getText()));
+                                                                        finalSbjList3.add(pos,temp);
+                                                                        Vector dulieu = new Vector();
+                                                                        for (int iii = 0; iii < finalSbjList2.size(); iii++) {
+                                                                            Vector phu = new Vector();
+                                                                            phu.add(finalSbjList2.get(iii).getMaMH());
+                                                                            phu.add(finalSbjList2.get(iii).getTenMH());
+                                                                            phu.add(finalSbjList2.get(iii).getTinChi());
+                                                                            dulieu.add(phu);
+                                                                        }
+                                                                        try {
+                                                                            LamTrangFile("DuLieuMonHoc.txt");
+                                                                            GhiFileMonHoc(finalSbjList3);
+                                                                            table.setModel(new DefaultTableModel(dulieu,Header));
+                                                                        } catch (IOException ioException) {
+                                                                            ioException.printStackTrace();
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                        FlowLayout flowLayout=new FlowLayout();
+                                                        butPanel.setLayout(flowLayout);
+                                                        butPanel.add(but1);
+                                                        butPanel.add(saveBut);
+                                                        mainPanel.add(butPanel);
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        Update.setIcon(new ImageIcon("update.png"));
+                                        JButton delete=new JButton("Delete");
+                                        delete.setIcon(new ImageIcon("delete.png"));
+                                        delete.addActionListener(new ActionListener() {
+                                            @Override
+                                            public void actionPerformed(ActionEvent e) {
+                                                if(e.getSource()==delete)
+                                                {
+                                                    if(table.getSelectedRow()<0)
+                                                    {
+                                                        JOptionPane.showMessageDialog(null,"Hãy chọn đối tượng cần xóa!");
+                                                    }
+                                                    else
+                                                    {
+                                                        int position=table.getSelectedRow();
+                                                        finalSbjList5.remove(position);
+                                                        Vector List=new Vector();
+                                                        for(int zzz = 0; zzz< finalSbjList5.size(); zzz++)
+                                                        {
+                                                            Vector tm=new Vector();
+                                                            tm.add(finalSbjList5.get(zzz).getMaMH());
+                                                            tm.add(finalSbjList5.get(zzz).getTenMH());
+                                                            tm.add(finalSbjList5.get(zzz).getTinChi());
+                                                            List.add(tm);
+                                                        }
+                                                        table.setModel(new DefaultTableModel(List,Header));
+                                                        try {
+                                                            LamTrangFile("DuLieuMonHoc.txt");
+                                                            GhiFileMonHoc(finalSbjList5);
+                                                        } catch (IOException ioException) {
+                                                            ioException.printStackTrace();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        JPanel southPanel=new JPanel();
+                                        southPanel.add(Search);
+                                        southPanel.add(add);
+                                        southPanel.add(Update);
+                                        southPanel.add(delete);
+                                        centerPanel.add(sp);
+                                        listFrame.add(listlabel,BorderLayout.NORTH);
+                                        listFrame.add(centerPanel,BorderLayout.CENTER);
+                                        listFrame.add(southPanel,BorderLayout.SOUTH);
+                                        listFrame.pack();
+                                    }
+                                }
+                            });
+                            Subject.setIcon(new ImageIcon("subject.png"));
+                            mainPanel.add(Subject);
                             frame.add(mainPanel,BorderLayout.CENTER);
                             break;
                         }
@@ -914,6 +1304,16 @@ public class Hibernate {
         out.flush();
         out.close();
     }
+    static void GhiFileMonHoc(Vector a) throws IOException {
+        ObjectOutputStream out=new ObjectOutputStream(new FileOutputStream("DuLieuMonHoc.txt"));
+        out.writeInt(a.size());
+        for(int i=0;i<a.size();i++)
+        {
+            out.writeObject(a.get(i));
+        }
+        out.flush();
+        out.close();
+    }
     static long FileSize(String filename)
     {
         File file=new File(filename);
@@ -942,6 +1342,18 @@ public class Hibernate {
         for(int i=0;i<count;i++)
         {
             Account acc= (Account) in.readObject();
+            a.add(acc);
+        }
+        in.close();
+        return a;
+    }
+    static Vector DocFileMonHoc(Vector a) throws IOException, ClassNotFoundException {
+
+        ObjectInputStream in=new ObjectInputStream(new FileInputStream("DuLieuMonHoc.txt"));
+        int count=in.readInt();
+        for(int i=0;i<count;i++)
+        {
+            Subject acc= (Subject) in.readObject();
             a.add(acc);
         }
         in.close();
