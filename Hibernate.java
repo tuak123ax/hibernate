@@ -45,14 +45,16 @@ public class Hibernate {
             admin.setPassword("admin");
             teacherList.add(admin);
             Teacher minh=new Teacher();
-            admin.setUsername("minh");
-            admin.setPassword("minh");
+            minh.setUsername("minh");
+            minh.setPassword("minh");
             teacherList.add(minh);
             Teacher tu=new Teacher();
-            admin.setUsername("tu");
-            admin.setPassword("tu");
+            tu.setUsername("tu");
+            tu.setPassword("tu");
             teacherList.add(tu);
         }
+        System.out.println(teacherAccounts.size());
+        System.out.println(teacherList.size());
         JFrame jFrame=new MyFrame();
         JLabel jLabel=new JLabel("LOGIN FORM");
         JPanel northPanel=new JPanel();
@@ -89,6 +91,16 @@ public class Hibernate {
         Vector<Account> finalTeacherAccounts = teacherAccounts;
         Vector<Account> finalTeacherAccounts1 = teacherAccounts;
         Vector<Account> finalTeacherAccounts2 = teacherAccounts;
+        Vector<Account> finalTeacherAccounts3 = teacherAccounts;
+        Vector finalTeacherList3 = teacherList;
+        Vector finalTeacherList4 = teacherList;
+        Vector finalTeacherList5 = teacherList;
+        Vector finalTeacherList6 = teacherList;
+        Vector finalTeacherList7 = teacherList;
+        Vector<Account> finalTeacherAccounts4 = teacherAccounts;
+        Vector<Account> finalTeacherAccounts5 = teacherAccounts;
+        Vector finalTeacherList8 = teacherList;
+        Vector<Account> finalTeacherAccounts6 = teacherAccounts;
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,10 +118,12 @@ public class Hibernate {
                             JFrame frame=new MyFrame();
                             jFrame.dispose();
                             Teacher temp=new Teacher();
+                            int pos=0;
                             for(int j = 0; j< finalTeacherList.size(); j++)
                             {
                                 if(user.equals(finalTeacherList.get(j).getUsername())&&pass.equals(finalTeacherList.get(j).getPassword()))
                                 {
+                                    pos=j;
                                     temp=finalTeacherList.get(j);
                                 }
                             }
@@ -140,6 +154,7 @@ public class Hibernate {
                             Teacher finalTemp3 = temp;
                             Teacher finalTemp4 = temp;
                             Teacher finalTemp5 = temp;
+                            int finalPos = pos;
                             info.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
@@ -280,16 +295,17 @@ public class Hibernate {
                                                         textField4.setFocusable(false);
                                                         textField5.setFocusable(false);
                                                         fileBut.setVisible(false);
+                                                        finalTeacherList.remove(finalPos);
                                                         finalTemp.setMGV(Integer.parseInt(textField.getText()));
                                                         finalTemp.setTenGV(textField1.getText());
                                                         finalTemp.setTuoi(Integer.parseInt(textField2.getText()));
                                                         finalTemp.setHinhanh(textField3.getText());
                                                         finalTemp.setDiaChi(textField4.getText());
                                                         finalTemp.setGhiChu(textField5.getText());
-                                                        finalTeacherList.add(finalTemp);
+                                                        finalTeacherList.add(finalPos,finalTemp);
                                                         try {
-                                                            LamTrangFile();
-                                                            GhiFile(finalTeacherList, finalTeacherList1.size());
+                                                            LamTrangFile("DuLieu.txt");
+                                                            GhiFile(finalTeacherList, finalTeacherList.size());
                                                         } catch (IOException ioException) {
                                                             ioException.printStackTrace();
                                                         }
@@ -422,6 +438,56 @@ public class Hibernate {
                                                 BPanel.add(Jpanel);
                                                 BPanel.add(Jpanel1);
                                                 JButton Them=new JButton("Thêm");
+                                                Them.addActionListener(new ActionListener() {
+                                                    @Override
+                                                    public void actionPerformed(ActionEvent e) {
+                                                        if(e.getSource()==Them)
+                                                        {
+                                                            if(JtextField.getText().equals("")||JtextField1.getText().equals(""))
+                                                            {
+                                                                JOptionPane.showMessageDialog(null,"Hãy nhập đầy đủ thông tin");
+                                                            }
+                                                            else
+                                                            {
+                                                                String newUser=JtextField.getText();
+                                                                String newPass=JtextField1.getText();
+                                                                boolean kt=false;
+                                                                for(int jj=0;jj<finalTeacherAccounts3.size();jj++)
+                                                                {
+                                                                    if(newUser.equals(finalTeacherAccounts3.get(jj).getKey()))
+                                                                    {
+                                                                        kt=true;
+                                                                        JOptionPane.showMessageDialog(null,"Tài khoản đã tồn tại");
+                                                                    }
+                                                                }
+                                                                if(kt==false) {
+                                                                    Account newAcc = new Account(newUser, newPass);
+                                                                    finalTeacherAccounts3.add(newAcc);
+                                                                    Teacher newTeacher = new Teacher();
+                                                                    newTeacher.setUsername(newUser);
+                                                                    newTeacher.setPassword(newPass);
+                                                                    finalTeacherList3.add(newTeacher);
+                                                                    try {
+                                                                        LamTrangFile("DuLieu.txt");
+                                                                        LamTrangFile("DuLieuAccount.txt");
+                                                                        GhiFile(finalTeacherList3, finalTeacherList3.size());
+                                                                        GhiFile2(finalTeacherAccounts3);
+                                                                        Vector dulieu = new Vector();
+                                                                        for (int iii = 0; iii < finalTeacherAccounts3.size(); iii++) {
+                                                                            Vector phu = new Vector();
+                                                                            phu.add(finalTeacherAccounts3.get(iii).getKey());
+                                                                            phu.add(finalTeacherAccounts3.get(iii).getValue());
+                                                                            dulieu.add(phu);
+                                                                        }
+                                                                        table.setModel(new DefaultTableModel(dulieu, Header));
+                                                                    } catch (IOException ioException) {
+                                                                        ioException.printStackTrace();
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                });
                                                 BPanel.add(Them);
                                                 Temp.setResizable(false);
                                                 Temp.add(BPanel);
@@ -429,9 +495,268 @@ public class Hibernate {
                                             }
                                         }
                                     });
+                                    JButton Update=new JButton("Update");
+                                    Update.addActionListener(new ActionListener() {
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            if(e.getSource()==Update)
+                                            {
+                                                if(table.getSelectedRow()<0)
+                                                {
+                                                    JOptionPane.showMessageDialog(null,"Hãy chọn đối tượng cần update!");
+                                                }
+                                                else
+                                                {
+                                                    Teacher temp= (Teacher) finalTeacherList6.get(table.getSelectedRow());
+                                                    JFrame jFrame1=new JFrame();
+                                                    jFrame1.setTitle("User account");
+                                                    ImageIcon Icon=new ImageIcon("user.png");
+                                                    jFrame1.setIconImage(Icon.getImage());
+                                                    jFrame1.setSize(520,450);
+                                                    jFrame1.setResizable(false);
+                                                    jFrame1.setVisible(true);
+                                                    JPanel panel=new JPanel();
+                                                    JLabel label1=new JLabel();
+                                                    HocSinh hs=new HocSinh();
+                                                    label1.setText("Mã giáo viên:");
+                                                    JTextField textField=new JTextField();
+                                                    textField.setText(String.valueOf(temp.getMGV()));
+                                                    if(textField.getText().equals("0"))
+                                                    {
+                                                        textField.setText("");
+                                                    }
+                                                    textField.setPreferredSize(new Dimension(500,30));
+                                                    panel.add(label1);
+                                                    panel.add(textField);
+                                                    JPanel panel1=new JPanel();
+                                                    JLabel label2=new JLabel();
+                                                    label2.setText("Tên giáo viên:");
+                                                    JTextField textField1=new JTextField();
+                                                    textField1.setText(temp.getTenGV());
+                                                    textField1.setPreferredSize(new Dimension(500,30));
+                                                    panel1.add(label2);
+                                                    panel1.add(textField1);
+                                                    JPanel panel2=new JPanel();
+                                                    JLabel label3=new JLabel();
+                                                    label3.setText("Tuổi:");
+                                                    JTextField textField2=new JTextField();
+                                                    textField2.setText(String.valueOf(temp.getTuoi()));
+                                                    if(textField2.getText().equals("0"))
+                                                    {
+                                                        textField2.setText("");
+                                                    }
+                                                    textField2.setPreferredSize(new Dimension(500,30));
+                                                    panel2.add(label3);
+                                                    panel2.add(textField2);
+                                                    JPanel panel3=new JPanel();
+                                                    JLabel label4=new JLabel();
+                                                    label4.setText("Địa chỉ:");
+                                                    JTextField textField3=new JTextField();
+                                                    textField3.setText(temp.getDiaChi());
+                                                    textField3.setPreferredSize(new Dimension(500,30));
+                                                    panel3.add(label4);
+                                                    panel3.add(textField3);
+                                                    JPanel panel4=new JPanel();
+                                                    JLabel label5=new JLabel();
+                                                    label5.setText("Ghi chú:");
+                                                    JTextField textField4=new JTextField();
+                                                    textField4.setText(temp.getGhiChu());
+                                                    textField4.setPreferredSize(new Dimension(500,30));
+                                                    panel4.add(label5);
+                                                    panel4.add(textField4);
+                                                    JPanel panel5=new JPanel();
+                                                    JLabel label6=new JLabel();
+                                                    label6.setText("Hình ảnh:");
+                                                    panel5.add(label6);
+                                                    JButton fileBut=new JButton("Chọn ảnh");
+                                                    panel5.add(fileBut);
+                                                    JTextField textField5=new JTextField();
+                                                    textField5.setText(temp.getHinhanh());
+                                                    textField5.setPreferredSize(new Dimension(500,30));
+                                                    panel5.add(textField5);
+                                                    fileBut.setVisible(false);
+                                                    fileBut.addActionListener(new ActionListener() {
+                                                        @Override
+                                                        public void actionPerformed(ActionEvent e) {
+                                                            if(e.getSource()==fileBut)
+                                                            {
+                                                                JFileChooser fileChooser=new JFileChooser();
+                                                                int response=fileChooser.showOpenDialog(null);
+                                                                if(response==JFileChooser.APPROVE_OPTION)
+                                                                {
+                                                                    File file=new File(fileChooser.getSelectedFile().getAbsolutePath());
+                                                                    String path=String.valueOf(file);
+                                                                    textField5.setText(path);
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                    textField.setFocusable(false);
+                                                    textField1.setFocusable(false);
+                                                    textField2.setFocusable(false);
+                                                    textField3.setFocusable(false);
+                                                    textField4.setFocusable(false);
+                                                    textField5.setFocusable(false);
+                                                    JPanel mainPanel=new JPanel();
+                                                    BoxLayout boxLayout=new BoxLayout(mainPanel,BoxLayout.Y_AXIS);
+                                                    mainPanel.setLayout(boxLayout);
+                                                    mainPanel.add(panel);
+                                                    mainPanel.add(panel1);
+                                                    mainPanel.add(panel2);
+                                                    mainPanel.add(panel3);
+                                                    mainPanel.add(panel4);
+                                                    mainPanel.add(panel5);
+                                                    jFrame1.add(mainPanel);
+                                                    JPanel butPanel=new JPanel();
+                                                    JButton but1=new JButton("Sửa thông tin");
+                                                    but1.addActionListener(new ActionListener() {
+                                                        @Override
+                                                        public void actionPerformed(ActionEvent e) {
+                                                            if(e.getSource()==but1)
+                                                            {
+                                                                textField.setFocusable(true);
+                                                                textField1.setFocusable(true);
+                                                                textField2.setFocusable(true);
+                                                                textField3.setFocusable(true);
+                                                                textField4.setFocusable(true);
+                                                                textField5.setFocusable(true);
+                                                                fileBut.setVisible(true);
+                                                            }
+                                                        }
+                                                    });
+                                                    JButton saveBut=new JButton("Lưu");
+                                                    saveBut.addActionListener(new ActionListener() {
+                                                        @Override
+                                                        public void actionPerformed(ActionEvent e) {
+                                                            if(e.getSource()==saveBut)
+                                                            {
+                                                                if(textField.getText().equals("")||textField1.getText().equals("")||textField2.getText().equals("")
+                                                                        ||textField3.getText().equals("")||textField4.getText().equals("")||textField5.getText().equals("")) {
+                                                                    JOptionPane.showMessageDialog(null,"Hãy nhập đầy đủ thông tin!");
+                                                                }
+                                                                else{
+                                                                    JOptionPane.showMessageDialog(null,"Đã lưu lại thông tin!");
+                                                                    textField.setFocusable(false);
+                                                                    textField1.setFocusable(false);
+                                                                    textField2.setFocusable(false);
+                                                                    textField3.setFocusable(false);
+                                                                    textField4.setFocusable(false);
+                                                                    textField5.setFocusable(false);
+                                                                    fileBut.setVisible(false);
+                                                                    int pos=table.getSelectedRow();
+                                                                    finalTeacherList.remove(pos);
+                                                                    temp.setMGV(Integer.parseInt(textField.getText()));
+                                                                    temp.setTenGV(textField1.getText());
+                                                                    temp.setTuoi(Integer.parseInt(textField2.getText()));
+                                                                    temp.setHinhanh(textField3.getText());
+                                                                    temp.setDiaChi(textField4.getText());
+                                                                    temp.setGhiChu(textField5.getText());
+                                                                    finalTeacherList.add(pos,temp);
+                                                                    try {
+                                                                        LamTrangFile("DuLieu.txt");
+                                                                        GhiFile(finalTeacherList, finalTeacherList.size());
+                                                                    } catch (IOException ioException) {
+                                                                        ioException.printStackTrace();
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                    FlowLayout flowLayout=new FlowLayout();
+                                                    butPanel.setLayout(flowLayout);
+                                                    butPanel.add(but1);
+                                                    butPanel.add(saveBut);
+                                                    mainPanel.add(butPanel);
+                                                }
+                                            }
+                                        }
+                                    });
+                                    Update.setIcon(new ImageIcon("update.png"));
+                                    JButton reset=new JButton("Reset");
+                                    reset.setIcon(new ImageIcon("reset.png"));
+                                    reset.addActionListener(new ActionListener() {
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            if(e.getSource()==reset)
+                                            {
+                                                if(table.getSelectedRow()<0)
+                                                {
+                                                    JOptionPane.showMessageDialog(null,"Hãy chọn đối tượng cần reset password");
+                                                }
+                                                else
+                                                {
+                                                    JOptionPane.showMessageDialog(null,"Reset password thành công!");
+                                                    JOptionPane.showMessageDialog(null,"Đã reset password giống với username!");
+                                                    int vitri=table.getSelectedRow();
+                                                    Teacher tempTeacher= (Teacher) finalTeacherList7.get(vitri);
+                                                    finalTeacherList7.remove(vitri);
+                                                    finalTeacherList7.add(vitri,tempTeacher);
+                                                    finalTeacherAccounts4.get(vitri).setValue(finalTeacherAccounts4.get(vitri).getKey());
+                                                    Vector list=new Vector();
+                                                    for(int zz=0;zz<finalTeacherList7.size();zz++)
+                                                    {
+                                                        Vector tmp=new Vector();
+                                                        tmp.add(finalTeacherAccounts4.get(zz).getKey());
+                                                        tmp.add(finalTeacherAccounts4.get(zz).getValue());
+                                                        list.add(tmp);
+                                                    }
+                                                    table.setModel(new DefaultTableModel(list,Header));
+                                                    try {
+                                                        LamTrangFile("DuLieu.txt");
+                                                        LamTrangFile("DuLieuAccount.txt");
+                                                        GhiFile(finalTeacherList7,finalTeacherList7.size());
+                                                        GhiFile2(finalTeacherAccounts4);
+                                                    } catch (IOException ioException) {
+                                                        ioException.printStackTrace();
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    });
+                                    JButton delete=new JButton("Delete");
+                                    delete.setIcon(new ImageIcon("delete.png"));
+                                    delete.addActionListener(new ActionListener() {
+                                        @Override
+                                        public void actionPerformed(ActionEvent e) {
+                                            if(e.getSource()==delete)
+                                            {
+                                                if(table.getSelectedRow()<0)
+                                                {
+                                                    JOptionPane.showMessageDialog(null,"Hãy chọn đối tượng cần xóa!");
+                                                }
+                                                else
+                                                {
+                                                    int position=table.getSelectedRow();
+                                                    finalTeacherList8.remove(position);
+                                                    finalTeacherAccounts6.remove(position);
+                                                    Vector List=new Vector();
+                                                    for(int zzz=0;zzz<finalTeacherList8.size();zzz++)
+                                                    {
+                                                        Vector tm=new Vector();
+                                                        tm.add(finalTeacherAccounts6.get(zzz).getKey());
+                                                        tm.add(finalTeacherAccounts6.get(zzz).getValue());
+                                                        List.add(tm);
+                                                    }
+                                                    table.setModel(new DefaultTableModel(List,Header));
+                                                    try {
+                                                        LamTrangFile("DuLieu.txt");
+                                                        LamTrangFile("DuLieuAccount.txt");
+                                                        GhiFile(finalTeacherList8,finalTeacherList8.size());
+                                                        GhiFile2(finalTeacherAccounts6);
+                                                    } catch (IOException ioException) {
+                                                        ioException.printStackTrace();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
                                     JPanel southPanel=new JPanel();
                                     southPanel.add(Search);
                                     southPanel.add(add);
+                                    southPanel.add(Update);
+                                    southPanel.add(reset);
+                                    southPanel.add(delete);
                                     centerPanel.add(sp);
                                     listFrame.add(listlabel,BorderLayout.NORTH);
                                     listFrame.add(centerPanel,BorderLayout.CENTER);
@@ -510,31 +835,27 @@ public class Hibernate {
                                                             else
                                                             {
                                                                 JOptionPane.showMessageDialog(null,"Đổi mật khẩu thành công!");
-                                                                Account temp=new Account(user,pass);
-                                                                finalTeacherAccounts.remove(temp);
-                                                                temp.setValue(jtextField1.getText());
-                                                                finalTeacherAccounts.add(temp);
                                                                 for(int k = 0; k< finalTeacherList2.size(); k++)
                                                                 {
                                                                     if(user.equals(finalTeacherList2.get(k).getUsername()))
                                                                     {
                                                                         finalTeacherList2.get(k).setPassword(jtextField1.getText());
-                                                                        for(int l = 0; l< finalTeacherAccounts.size(); l++)
-                                                                        {
-                                                                            if(user.equals(finalTeacherAccounts.get(l).getKey()))
-                                                                            {
-                                                                                finalTeacherAccounts.get(l).setValue(jtextField1.getText());
-                                                                            }
-                                                                        }
-                                                                        try {
-                                                                            LamTrangFile();
-                                                                            GhiFile(finalTeacherList2,finalTeacherList2.size());
-                                                                            GhiFile2(finalTeacherAccounts);
-                                                                        } catch (IOException ioException) {
-                                                                            ioException.printStackTrace();
-                                                                        }
-
                                                                     }
+                                                                }
+                                                                for(int l = 0; l< finalTeacherAccounts.size(); l++)
+                                                                {
+                                                                    if(user.equals(finalTeacherAccounts.get(l).getKey()))
+                                                                    {
+                                                                        finalTeacherAccounts.get(l).setValue(jtextField1.getText());
+                                                                    }
+                                                                }
+                                                                try {
+                                                                    LamTrangFile("DuLieu.txt");
+                                                                    LamTrangFile("DuLieuAccount.txt");
+                                                                    GhiFile(finalTeacherList2,finalTeacherList2.size());
+                                                                    GhiFile2(finalTeacherAccounts);
+                                                                } catch (IOException ioException) {
+                                                                    ioException.printStackTrace();
                                                                 }
                                                             }
                                                         }
@@ -626,8 +947,8 @@ public class Hibernate {
         in.close();
         return a;
     }
-    static void LamTrangFile() throws IOException {
-        ObjectOutputStream out=new ObjectOutputStream(new FileOutputStream("DuLieu.txt"));
+    static void LamTrangFile(String filename) throws IOException {
+        ObjectOutputStream out=new ObjectOutputStream(new FileOutputStream(filename));
         out.writeBytes("");
         out.flush();
         out.close();
