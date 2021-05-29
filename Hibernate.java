@@ -8,10 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.io.*;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.TreeMap;
-import java.util.Vector;
 
 import static java.awt.Color.black;
 import static java.awt.Color.green;
@@ -21,7 +19,13 @@ public class Hibernate {
         Vector<Account>teacherAccounts=new Vector<>();
         Vector<HocSinh>stdList=new Vector<>();
         Vector<Subject>sbjList=new Vector<>();
+        Vector<Semester>semesterList=new Vector<>();
+        final Semester[] currentSemester = new Semester[1];
         Vector teacherList=new Vector();
+        if(FileSize("DuLieuHocKyhientai.txt")!=0)
+        {
+            currentSemester[0]=DocFilecurrentSemester(currentSemester[0]);
+        }
         if(FileSize("DuLieu.txt")!=0)
         {
             teacherList=DocFile(teacherList);
@@ -33,6 +37,10 @@ public class Hibernate {
         if(FileSize("DuLieuMonHoc.txt")!=0)
         {
             sbjList=DocFileMonHoc(sbjList);
+        }
+        if(FileSize("DuLieuHocKy.txt")!=0)
+        {
+            semesterList=DocFileSemester(semesterList);
         }
         if(teacherAccounts.size()==0)
         {
@@ -75,6 +83,33 @@ public class Hibernate {
             sbjList.add(math);
             sbjList.add(Physics);
             sbjList.add(programming);
+        }
+        if(semesterList.size()==0)
+        {
+            Semester one=new Semester();
+            one.setTenHK("Học kỳ 1");
+            one.setYear(2021);
+            DateTime bd=new DateTime(1,1,2021);
+            DateTime kt=new DateTime(31,3,2021);
+            one.setNgayBD(bd);
+            one.setNgayKT(kt);
+            Semester two=new Semester();
+            two.setTenHK("Học kỳ 2");
+            two.setYear(2021);
+            DateTime bd2=new DateTime(1,4,2021);
+            DateTime kt2=new DateTime(31,6,2021);
+            two.setNgayBD(bd2);
+            two.setNgayKT(kt2);
+            Semester three=new Semester();
+            three.setTenHK("Học kỳ 3");
+            three.setYear(2021);
+            DateTime bd3=new DateTime(1,7,2021);
+            DateTime kt3=new DateTime(31,9,2021);
+            three.setNgayBD(bd3);
+            three.setNgayKT(kt3);
+            semesterList.add(one);
+            semesterList.add(two);
+            semesterList.add(three);
         }
         System.out.println(teacherAccounts.size());
         System.out.println(teacherList.size());
@@ -130,6 +165,10 @@ public class Hibernate {
         Vector<Subject> finalSbjList3 = sbjList;
         Vector<Subject> finalSbjList4 = sbjList;
         Vector<Subject> finalSbjList5 = sbjList;
+        Vector<Semester> finalSemesterList = semesterList;
+        Vector<Semester> finalSemesterList1 = semesterList;
+        Vector<Semester> finalSemesterList2 = semesterList;
+        Vector<Semester> finalSemesterList3 = semesterList;
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1258,7 +1297,238 @@ public class Hibernate {
                                 }
                             });
                             Subject.setIcon(new ImageIcon("subject.png"));
+                            JButton semester=new JButton("Semester");
+                            semester.setIcon(new ImageIcon("semester.png"));
+                            semester.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    if(e.getSource()==semester)
+                                    {
+                                        JFrame listFrame=new JFrame();
+                                        listFrame.setTitle("Danh sách học kỳ");
+                                        listFrame.setIconImage(new ImageIcon("semester.png").getImage());
+
+                                        listFrame.setSize(700,700);
+                                        listFrame.setVisible(true);
+                                        JButton Set=new JButton("Set");
+                                        Set.setIcon(new ImageIcon("set.png"));
+                                        BorderLayout borderLayout1=new BorderLayout();
+                                        listFrame.setLayout(borderLayout1);
+                                        JPanel centerPanel=new JPanel();
+                                        JLabel listlabel=new JLabel("List Semesters");
+                                        listlabel.setHorizontalAlignment(0);
+                                        Vector Header=new Vector();
+                                        Header.add("Tên học kỳ");
+                                        Header.add("Năm học");
+                                        Header.add("Ngày bắt đầu");
+                                        Header.add("Ngày kết thúc");
+                                        Vector data=new Vector();
+                                        for(int ii = 0; ii< finalSemesterList.size(); ii++)
+                                        {
+                                            Vector temp=new Vector();
+                                            temp.add(finalSemesterList.get(ii).getTenHK());
+                                            temp.add(finalSemesterList.get(ii).getYear());
+                                            temp.add(finalSemesterList.get(ii).getNgayBD());
+                                            temp.add(finalSemesterList.get(ii).getNgayKT());
+                                            data.add(temp);
+                                        }
+                                        JTable table=new JTable(data,Header);
+                                        JScrollPane sp=new JScrollPane(table);
+                                        Set.addActionListener(new ActionListener() {
+                                            @Override
+                                            public void actionPerformed(ActionEvent e) {
+                                                if(e.getSource()==Set)
+                                                {
+                                                    if(table.getSelectedRow()<0)
+                                                    {
+                                                        JOptionPane.showMessageDialog(null,"Hãy chọn học kỳ để set!");
+                                                    }
+                                                    else
+                                                    {
+                                                        int pos=table.getSelectedRow();
+                                                        currentSemester[0] = finalSemesterList3.get(pos);
+                                                        JOptionPane.showMessageDialog(null,"Đã set thành học kỳ hiện tại!");
+                                                        try {
+                                                            LamTrangFile("DuLieuHocKyhientai.txt");
+                                                            GhiFilecurrentSemester(currentSemester[0]);
+                                                        } catch (IOException ioException) {
+                                                            ioException.printStackTrace();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        JButton add=new JButton("Add");
+                                        add.setIcon(new ImageIcon("rsz_add.png"));
+                                        add.addActionListener(new ActionListener() {
+                                            @Override
+                                            public void actionPerformed(ActionEvent e) {
+                                                if(e.getSource()==add)
+                                                {
+                                                    JFrame Temp=new JFrame();
+                                                    Temp.setSize(300,300);
+                                                    Temp.setVisible(true);
+                                                    Temp.setIconImage(new ImageIcon("rsz_add.png").getImage());
+                                                    Temp.setTitle("Add");
+                                                    JPanel Jpanel=new JPanel();
+                                                    JLabel Jlabel=new JLabel("Tên học kỳ:");
+                                                    Jpanel.setLayout(new FlowLayout());
+                                                    JTextField JtextField=new JTextField();
+                                                    JtextField.setPreferredSize(new Dimension(300,30));
+                                                    Jpanel.add(Jlabel);
+                                                    Jpanel.add(JtextField);
+                                                    JPanel Jpanel1=new JPanel();
+                                                    JLabel Jlabel1=new JLabel("Năm học:");
+                                                    Jpanel1.setLayout(new FlowLayout());
+                                                    JTextField JtextField1=new JTextField();
+                                                    JtextField1.setPreferredSize(new Dimension(300,30));
+                                                    Jpanel1.add(Jlabel1);
+                                                    Jpanel1.add(JtextField1);
+                                                    JPanel Jpanel2=new JPanel();
+                                                    JLabel Jlabel2=new JLabel("Ngày bắt đầu(dd/mm/yyyy):");
+                                                    Jpanel2.setLayout(new FlowLayout());
+                                                    JTextField JtextField2=new JTextField();
+                                                    JtextField2.setPreferredSize(new Dimension(300,30));
+                                                    Jpanel2.add(Jlabel2);
+                                                    Jpanel2.add(JtextField2);
+                                                    JPanel Jpanel3=new JPanel();
+                                                    JLabel Jlabel3=new JLabel("Ngày kết thúc(dd/mm/yyyy):");
+                                                    Jpanel3.setLayout(new FlowLayout());
+                                                    JTextField JtextField3=new JTextField();
+                                                    JtextField3.setPreferredSize(new Dimension(300,30));
+                                                    Jpanel3.add(Jlabel3);
+                                                    Jpanel3.add(JtextField3);
+                                                    JPanel BPanel=new JPanel();
+                                                    BoxLayout boxLayout1=new BoxLayout(BPanel,BoxLayout.Y_AXIS);
+                                                    BPanel.setLayout(boxLayout1);
+                                                    BPanel.add(Jpanel);
+                                                    BPanel.add(Jpanel1);
+                                                    BPanel.add(Jpanel2);
+                                                    BPanel.add(Jpanel3);
+                                                    JButton Them=new JButton("Thêm");
+                                                    Them.addActionListener(new ActionListener() {
+                                                        @Override
+                                                        public void actionPerformed(ActionEvent e) {
+                                                            if(e.getSource()==Them)
+                                                            {
+                                                                if(JtextField.getText().equals("")||JtextField1.getText().equals(""))
+                                                                {
+                                                                    JOptionPane.showMessageDialog(null,"Hãy nhập đầy đủ thông tin");
+                                                                }
+                                                                else
+                                                                {
+                                                                    String tenhk=JtextField.getText();
+                                                                    int namhoc=Integer.parseInt(JtextField1.getText());
+                                                                    StringTokenizer tokenizer=new StringTokenizer(JtextField2.getText(),"/");
+                                                                    Vector Date=new Vector();
+                                                                    while(tokenizer.hasMoreTokens())
+                                                                    {
+                                                                        Date.add(tokenizer.nextToken());
+                                                                    }
+                                                                    int day= Integer.parseInt((String) Date.get(0));
+                                                                    int month=Integer.parseInt((String) Date.get(1));
+                                                                    int year=Integer.parseInt((String) Date.get(2));
+                                                                    DateTime start=new DateTime(day,month,year);
+                                                                    StringTokenizer tokenizer2=new StringTokenizer(JtextField3.getText(),"/");
+                                                                    Vector Date2=new Vector();
+                                                                    while(tokenizer2.hasMoreTokens())
+                                                                    {
+                                                                        Date2.add(tokenizer2.nextToken());
+                                                                    }
+                                                                    int day2= Integer.parseInt((String) Date2.get(0));
+                                                                    int month2=Integer.parseInt((String) Date2.get(1));
+                                                                    int year2=Integer.parseInt((String) Date2.get(2));
+                                                                    DateTime end=new DateTime(day2,month2,year2);
+                                                                    boolean kt=false;
+                                                                    for(int jj = 0; jj< finalSemesterList1.size(); jj++)
+                                                                    {
+                                                                        if(namhoc==finalSemesterList1.get(jj).getYear()&&start== finalSemesterList1.get(jj).getNgayBD()&&end== finalSemesterList1.get(jj).getNgayKT())
+                                                                        {
+                                                                            kt=true;
+                                                                            JOptionPane.showMessageDialog(null,"Học kỳ đã tồn tại");
+                                                                        }
+                                                                    }
+                                                                    if(kt==false) {
+                                                                        Semester newSem=new Semester(tenhk,namhoc,start,end);
+                                                                        finalSemesterList1.add(newSem);
+                                                                        try {
+                                                                            LamTrangFile("DuLieuHocKy.txt");
+                                                                            GhiFileSemester(finalSemesterList1);
+                                                                            Vector dulieu = new Vector();
+                                                                            for (int iii = 0; iii < finalSemesterList1.size(); iii++) {
+                                                                                Vector phu = new Vector();
+                                                                                phu.add(finalSemesterList1.get(iii).getTenHK());
+                                                                                phu.add(finalSemesterList1.get(iii).getYear());
+                                                                                phu.add(finalSemesterList1.get(iii).getNgayBD());
+                                                                                phu.add(finalSemesterList1.get(iii).getNgayKT());
+                                                                                dulieu.add(phu);
+                                                                            }
+                                                                            table.setModel(new DefaultTableModel(dulieu, Header));
+                                                                        } catch (IOException ioException) {
+                                                                            ioException.printStackTrace();
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                    BPanel.add(Them);
+                                                    Temp.setResizable(false);
+                                                    Temp.add(BPanel);
+                                                    Temp.pack();
+                                                }
+                                            }
+                                        });
+                                        JButton delete=new JButton("Delete");
+                                        delete.setIcon(new ImageIcon("delete.png"));
+                                        delete.addActionListener(new ActionListener() {
+                                            @Override
+                                            public void actionPerformed(ActionEvent e) {
+                                                if(e.getSource()==delete)
+                                                {
+                                                    if(table.getSelectedRow()<0)
+                                                    {
+                                                        JOptionPane.showMessageDialog(null,"Hãy chọn đối tượng cần xóa!");
+                                                    }
+                                                    else
+                                                    {
+                                                        int position=table.getSelectedRow();
+                                                        finalSemesterList2.remove(position);
+                                                        Vector List=new Vector();
+                                                        for(int zzz = 0; zzz< finalSemesterList2.size(); zzz++)
+                                                        {
+                                                            Vector tm=new Vector();
+                                                            tm.add(finalSemesterList2.get(zzz).getTenHK());
+                                                            tm.add(finalSemesterList2.get(zzz).getYear());
+                                                            tm.add(finalSemesterList2.get(zzz).getNgayBD());
+                                                            tm.add(finalSemesterList2.get(zzz).getNgayKT());
+                                                            List.add(tm);
+                                                        }
+                                                        table.setModel(new DefaultTableModel(List,Header));
+                                                        try {
+                                                            LamTrangFile("DuLieuHocKy.txt");
+                                                            GhiFileSemester(finalSemesterList2);
+                                                        } catch (IOException ioException) {
+                                                            ioException.printStackTrace();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        JPanel southPanel=new JPanel();
+                                        southPanel.add(Set);
+                                        southPanel.add(add);
+                                        southPanel.add(delete);
+                                        centerPanel.add(sp);
+                                        listFrame.add(listlabel,BorderLayout.NORTH);
+                                        listFrame.add(centerPanel,BorderLayout.CENTER);
+                                        listFrame.add(southPanel,BorderLayout.SOUTH);
+                                        listFrame.pack();
+                                    }
+                                }
+                            });
                             mainPanel.add(Subject);
+                            mainPanel.add(semester);
                             frame.add(mainPanel,BorderLayout.CENTER);
                             break;
                         }
@@ -1314,6 +1584,22 @@ public class Hibernate {
         out.flush();
         out.close();
     }
+    static void GhiFileSemester(Vector a) throws IOException {
+        ObjectOutputStream out=new ObjectOutputStream(new FileOutputStream("DuLieuHocKy.txt"));
+        out.writeInt(a.size());
+        for(int i=0;i<a.size();i++)
+        {
+            out.writeObject(a.get(i));
+        }
+        out.flush();
+        out.close();
+    }
+    static void GhiFilecurrentSemester(Semester a) throws IOException {
+        ObjectOutputStream out=new ObjectOutputStream(new FileOutputStream("DuLieuHocKyhientai.txt"));
+        out.writeObject(a);
+        out.flush();
+        out.close();
+    }
     static long FileSize(String filename)
     {
         File file=new File(filename);
@@ -1356,6 +1642,25 @@ public class Hibernate {
             Subject acc= (Subject) in.readObject();
             a.add(acc);
         }
+        in.close();
+        return a;
+    }
+    static Vector DocFileSemester(Vector a) throws IOException, ClassNotFoundException {
+
+        ObjectInputStream in=new ObjectInputStream(new FileInputStream("DuLieuHocKy.txt"));
+        int count=in.readInt();
+        for(int i=0;i<count;i++)
+        {
+            Semester acc= (Semester) in.readObject();
+            a.add(acc);
+        }
+        in.close();
+        return a;
+    }
+    static Semester DocFilecurrentSemester(Semester a) throws IOException, ClassNotFoundException {
+
+        ObjectInputStream in=new ObjectInputStream(new FileInputStream("DuLieuHocKyhientai.txt"));
+        a= (Semester) in.readObject();
         in.close();
         return a;
     }
