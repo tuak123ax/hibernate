@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.Vector;
 
 public class HocSinh implements Serializable {
     private int MHS;
@@ -6,21 +7,33 @@ public class HocSinh implements Serializable {
     private float Diem;
     private String Hinhanh;
     private String DiaChi;
-    private String GhiChu;
+    private String Lop;
+    Vector<Subject> listSub;
+    private String username;
+    private String password;
     public HocSinh() {
 
     }
 
-    public HocSinh(int MHS,String TenHS,float Diem,String Hinhanh,String DiaChi,String GhiChu)
+    public HocSinh(int MHS,String TenHS,float Diem,String Hinhanh,String DiaChi,String Lop)
     {
         this.MHS=MHS;
         this.TenHS=TenHS;
         this.Diem=Diem;
         this.Hinhanh=Hinhanh;
         this.DiaChi=DiaChi;
-        this.GhiChu=GhiChu;
+        this.Lop=Lop;
     }
-
+    public HocSinh(int MHS,String TenHS,float Diem,String Hinhanh,String DiaChi,String Lop,Vector<Subject>ListSub )
+    {
+        this.MHS=MHS;
+        this.TenHS=TenHS;
+        this.Diem=Diem;
+        this.Hinhanh=Hinhanh;
+        this.DiaChi=DiaChi;
+        this.Lop=Lop;
+        this.listSub=ListSub;
+    }
     public int getMHS() {
         return MHS;
     }
@@ -61,11 +74,35 @@ public class HocSinh implements Serializable {
         DiaChi = diaChi;
     }
 
-    public String getGhiChu() {
-        return GhiChu;
+    public String getLop() {
+        return Lop;
     }
 
-    public void setGhiChu(String ghiChu) {
-        GhiChu = ghiChu;
+    public void setLop(String lop) {
+        Lop = lop;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Vector<Subject> getListSub() {
+        return listSub;
+    }
+
+    public void setListSub(Vector<Subject> listSub) {
+        this.listSub = listSub;
     }
 }

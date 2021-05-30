@@ -1,10 +1,12 @@
 import java.io.Serializable;
+import java.util.Vector;
 
 public class Class implements Serializable {
     private String tenLop;
     private int SLSV;
     private int SLNam;
     private int SLNu;
+    Vector<HocSinh>SVList;
     public Class(){}
     public Class(String tenLop,int SLSV,int SLNam,int SLNu)
     {
@@ -44,5 +46,13 @@ public class Class implements Serializable {
 
     public void setSLNu(int SLNu) {
         this.SLNu = SLNu;
+    }
+
+    public Vector<HocSinh> getSVList() {
+        return SVList;
+    }
+
+    public void setSVList(Vector<HocSinh> SVList) {
+        this.SVList = SVList;
     }
 }
