@@ -20,8 +20,13 @@ public class Hibernate {
         Vector<HocSinh>stdList=new Vector<>();
         Vector<Subject>sbjList=new Vector<>();
         Vector<Semester>semesterList=new Vector<>();
+        Vector<Class>classList=new Vector<>();
         final Semester[] currentSemester = new Semester[1];
         Vector teacherList=new Vector();
+        if(FileSize("DuLieuLop.txt")!=0)
+        {
+            classList=DocFileLop(classList);
+        }
         if(FileSize("DuLieuHocKyhientai.txt")!=0)
         {
             currentSemester[0]=DocFilecurrentSemester(currentSemester[0]);
@@ -111,8 +116,15 @@ public class Hibernate {
             semesterList.add(two);
             semesterList.add(three);
         }
-        System.out.println(teacherAccounts.size());
-        System.out.println(teacherList.size());
+        if(classList.size()==0)
+        {
+            Class cls1=new Class("19CTT2",100,70,30);
+            Class cls2=new Class("19CTT3",120,100,20);
+            Class cls3=new Class("19CTT4",100,80,20);
+            classList.add(cls1);
+            classList.add(cls2);
+            classList.add(cls3);
+        }
         JFrame jFrame=new MyFrame();
         JLabel jLabel=new JLabel("LOGIN FORM");
         JPanel northPanel=new JPanel();
@@ -169,6 +181,9 @@ public class Hibernate {
         Vector<Semester> finalSemesterList1 = semesterList;
         Vector<Semester> finalSemesterList2 = semesterList;
         Vector<Semester> finalSemesterList3 = semesterList;
+        Vector<Class> finalClassList = classList;
+        Vector<Class> finalClassList1 = classList;
+        Vector<Class> finalClassList2 = classList;
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1529,6 +1544,192 @@ public class Hibernate {
                             });
                             mainPanel.add(Subject);
                             mainPanel.add(semester);
+                            JButton Lop=new JButton("Class");
+                            Lop.setIcon(new ImageIcon("class.png"));
+                            Lop.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    if(e.getSource()==Lop)
+                                    {
+                                        JFrame listFrame=new JFrame();
+                                        listFrame.setTitle("Danh sách lớp");
+                                        listFrame.setIconImage(new ImageIcon("class.png").getImage());
+
+                                        listFrame.setSize(700,700);
+                                        listFrame.setVisible(true);
+                                        BorderLayout borderLayout1=new BorderLayout();
+                                        listFrame.setLayout(borderLayout1);
+                                        JPanel centerPanel=new JPanel();
+                                        JLabel listlabel=new JLabel("List Classes");
+                                        listlabel.setHorizontalAlignment(0);
+                                        Vector Header=new Vector();
+                                        Header.add("Tên lớp");
+                                        Header.add("Số lượng sinh viên");
+                                        Header.add("Số lượng nam");
+                                        Header.add("Số lượng nữ");
+                                        Vector data=new Vector();
+                                        for(int ii = 0; ii< finalClassList.size(); ii++)
+                                        {
+                                            Vector temp=new Vector();
+                                            temp.add(finalClassList.get(ii).getTenLop());
+                                            temp.add(finalClassList.get(ii).getSLSV());
+                                            temp.add(finalClassList.get(ii).getSLNam());
+                                            temp.add(finalClassList.get(ii).getSLNu());
+                                            data.add(temp);
+                                        }
+                                        JTable table=new JTable(data,Header);
+                                        JScrollPane sp=new JScrollPane(table);
+                                        JButton add=new JButton("Add");
+                                        add.setIcon(new ImageIcon("rsz_add.png"));
+                                        add.addActionListener(new ActionListener() {
+                                            @Override
+                                            public void actionPerformed(ActionEvent e) {
+                                                if(e.getSource()==add)
+                                                {
+                                                    JFrame Temp=new JFrame();
+                                                    Temp.setSize(300,300);
+                                                    Temp.setVisible(true);
+                                                    Temp.setIconImage(new ImageIcon("rsz_add.png").getImage());
+                                                    Temp.setTitle("Add");
+                                                    JPanel Jpanel=new JPanel();
+                                                    JLabel Jlabel=new JLabel("Tên lớp:");
+                                                    Jpanel.setLayout(new FlowLayout());
+                                                    JTextField JtextField=new JTextField();
+                                                    JtextField.setPreferredSize(new Dimension(300,30));
+                                                    Jpanel.add(Jlabel);
+                                                    Jpanel.add(JtextField);
+                                                    JPanel Jpanel1=new JPanel();
+                                                    JLabel Jlabel1=new JLabel("Số lượng sinh viên:");
+                                                    Jpanel1.setLayout(new FlowLayout());
+                                                    JTextField JtextField1=new JTextField();
+                                                    JtextField1.setPreferredSize(new Dimension(300,30));
+                                                    Jpanel1.add(Jlabel1);
+                                                    Jpanel1.add(JtextField1);
+                                                    JPanel Jpanel2=new JPanel();
+                                                    JLabel Jlabel2=new JLabel("Số lượng nam:");
+                                                    Jpanel2.setLayout(new FlowLayout());
+                                                    JTextField JtextField2=new JTextField();
+                                                    JtextField2.setPreferredSize(new Dimension(300,30));
+                                                    Jpanel2.add(Jlabel2);
+                                                    Jpanel2.add(JtextField2);
+                                                    JPanel Jpanel3=new JPanel();
+                                                    JLabel Jlabel3=new JLabel("Số lượng nữ:");
+                                                    Jpanel3.setLayout(new FlowLayout());
+                                                    JTextField JtextField3=new JTextField();
+                                                    JtextField3.setPreferredSize(new Dimension(300,30));
+                                                    Jpanel3.add(Jlabel3);
+                                                    Jpanel3.add(JtextField3);
+                                                    JPanel BPanel=new JPanel();
+                                                    BoxLayout boxLayout1=new BoxLayout(BPanel,BoxLayout.Y_AXIS);
+                                                    BPanel.setLayout(boxLayout1);
+                                                    BPanel.add(Jpanel);
+                                                    BPanel.add(Jpanel1);
+                                                    BPanel.add(Jpanel2);
+                                                    BPanel.add(Jpanel3);
+                                                    JButton Them=new JButton("Thêm");
+                                                    Them.addActionListener(new ActionListener() {
+                                                        @Override
+                                                        public void actionPerformed(ActionEvent e) {
+                                                            if(e.getSource()==Them)
+                                                            {
+                                                                if(JtextField.getText().equals("")||JtextField1.getText().equals(""))
+                                                                {
+                                                                    JOptionPane.showMessageDialog(null,"Hãy nhập đầy đủ thông tin");
+                                                                }
+                                                                else
+                                                                {
+                                                                    String tenlop=JtextField.getText();
+                                                                    int sl=Integer.parseInt(JtextField1.getText());
+                                                                    int slnam=Integer.parseInt(JtextField2.getText());
+                                                                    int slnu=Integer.parseInt(JtextField3.getText());
+                                                                    boolean kt=false;
+                                                                    for(int jj = 0; jj< finalClassList1.size(); jj++)
+                                                                    {
+                                                                        if(tenlop.equals(finalClassList1.get(jj).getTenLop()))
+                                                                        {
+                                                                            kt=true;
+                                                                            JOptionPane.showMessageDialog(null,"Lớp đã tồn tại!");
+                                                                        }
+                                                                    }
+                                                                    if(kt==false) {
+                                                                        Class newClass=new Class(tenlop,sl,slnam,slnu);
+                                                                        finalClassList1.add(newClass);
+                                                                        try {
+                                                                            LamTrangFile("DuLieuLop.txt");
+                                                                            GhiFileLop(finalClassList1);
+                                                                            Vector dulieu = new Vector();
+                                                                            for (int iii = 0; iii < finalClassList1.size(); iii++) {
+                                                                                Vector phu = new Vector();
+                                                                                phu.add(finalClassList1.get(iii).getTenLop());
+                                                                                phu.add(finalClassList1.get(iii).getSLSV());
+                                                                                phu.add(finalClassList1.get(iii).getSLNam());
+                                                                                phu.add(finalClassList1.get(iii).getSLNu());
+                                                                                dulieu.add(phu);
+                                                                            }
+                                                                            table.setModel(new DefaultTableModel(dulieu, Header));
+                                                                        } catch (IOException ioException) {
+                                                                            ioException.printStackTrace();
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                    BPanel.add(Them);
+                                                    Temp.setResizable(false);
+                                                    Temp.add(BPanel);
+                                                    Temp.pack();
+                                                }
+                                            }
+                                        });
+                                        JButton delete=new JButton("Delete");
+                                        delete.setIcon(new ImageIcon("delete.png"));
+                                        delete.addActionListener(new ActionListener() {
+                                            @Override
+                                            public void actionPerformed(ActionEvent e) {
+                                                if(e.getSource()==delete)
+                                                {
+                                                    if(table.getSelectedRow()<0)
+                                                    {
+                                                        JOptionPane.showMessageDialog(null,"Hãy chọn đối tượng cần xóa!");
+                                                    }
+                                                    else
+                                                    {
+                                                        int position=table.getSelectedRow();
+                                                        finalClassList2.remove(position);
+                                                        Vector List=new Vector();
+                                                        for(int zzz = 0; zzz< finalClassList2.size(); zzz++)
+                                                        {
+                                                            Vector tm=new Vector();
+                                                            tm.add(finalClassList2.get(zzz).getTenLop());
+                                                            tm.add(finalClassList2.get(zzz).getSLSV());
+                                                            tm.add(finalClassList2.get(zzz).getSLNam());
+                                                            tm.add(finalClassList2.get(zzz).getSLNu());
+                                                            List.add(tm);
+                                                        }
+                                                        table.setModel(new DefaultTableModel(List,Header));
+                                                        try {
+                                                            LamTrangFile("DuLieuLop.txt");
+                                                            GhiFileLop(finalClassList2);
+                                                        } catch (IOException ioException) {
+                                                            ioException.printStackTrace();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        JPanel southPanel=new JPanel();
+                                        southPanel.add(add);
+                                        southPanel.add(delete);
+                                        centerPanel.add(sp);
+                                        listFrame.add(listlabel,BorderLayout.NORTH);
+                                        listFrame.add(centerPanel,BorderLayout.CENTER);
+                                        listFrame.add(southPanel,BorderLayout.SOUTH);
+                                        listFrame.pack();
+                                    }
+                                }
+                            });
+                            mainPanel.add(Lop);
                             frame.add(mainPanel,BorderLayout.CENTER);
                             break;
                         }
@@ -1600,6 +1801,16 @@ public class Hibernate {
         out.flush();
         out.close();
     }
+    static void GhiFileLop(Vector a) throws IOException {
+        ObjectOutputStream out=new ObjectOutputStream(new FileOutputStream("DuLieuLop.txt"));
+        out.writeInt(a.size());
+        for(int i=0;i<a.size();i++)
+        {
+            out.writeObject(a.get(i));
+        }
+        out.flush();
+        out.close();
+    }
     static long FileSize(String filename)
     {
         File file=new File(filename);
@@ -1661,6 +1872,18 @@ public class Hibernate {
 
         ObjectInputStream in=new ObjectInputStream(new FileInputStream("DuLieuHocKyhientai.txt"));
         a= (Semester) in.readObject();
+        in.close();
+        return a;
+    }
+    static Vector DocFileLop(Vector a) throws IOException, ClassNotFoundException {
+
+        ObjectInputStream in=new ObjectInputStream(new FileInputStream("DuLieuLop.txt"));
+        int count=in.readInt();
+        for(int i=0;i<count;i++)
+        {
+            Class acc= (Class) in.readObject();
+            a.add(acc);
+        }
         in.close();
         return a;
     }
