@@ -7,6 +7,7 @@ public class Teacher implements Serializable {
     private String Hinhanh;
     private String DiaChi;
     private String GhiChu;
+    private Account account;
     public Teacher() {
 
     }
@@ -20,7 +21,16 @@ public class Teacher implements Serializable {
         this.DiaChi=DiaChi;
         this.GhiChu=GhiChu;
     }
-
+    public Teacher(int MGV,String TenGV,int Tuoi,String Hinhanh,String DiaChi,String GhiChu,Account account)
+    {
+        this.MGV=MGV;
+        this.TenGV=TenGV;
+        this.Tuoi=Tuoi;
+        this.Hinhanh=Hinhanh;
+        this.DiaChi=DiaChi;
+        this.GhiChu=GhiChu;
+        this.account=account;
+    }
     public int getMGV() {
         return MGV;
     }
@@ -67,5 +77,13 @@ public class Teacher implements Serializable {
 
     public void setGhiChu(String ghiChu) {
         GhiChu = ghiChu;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

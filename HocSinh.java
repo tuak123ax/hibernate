@@ -8,9 +8,9 @@ public class HocSinh implements Serializable {
     private String Hinhanh;
     private String DiaChi;
     private String Lop;
-    Vector<Subject> listSub;
-    private String username;
-    private String password;
+    Vector<Subject>listSub;
+    Vector<Course> listCourse;
+    private Account account;
     public HocSinh() {
 
     }
@@ -34,6 +34,19 @@ public class HocSinh implements Serializable {
         this.Lop=Lop;
         this.listSub=ListSub;
     }
+    public HocSinh(int MHS,String TenHS,float Diem,String Hinhanh,String DiaChi,String Lop,Vector<Subject>ListSub,Vector<Course>listCourse,Account account )
+    {
+        this.MHS=MHS;
+        this.TenHS=TenHS;
+        this.Diem=Diem;
+        this.Hinhanh=Hinhanh;
+        this.DiaChi=DiaChi;
+        this.Lop=Lop;
+        this.listSub=ListSub;
+        this.listCourse=listCourse;
+        this.account=account;
+    }
+
     public int getMHS() {
         return MHS;
     }
@@ -82,20 +95,12 @@ public class HocSinh implements Serializable {
         Lop = lop;
     }
 
-    public String getUsername() {
-        return username;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public Vector<Subject> getListSub() {
@@ -104,5 +109,13 @@ public class HocSinh implements Serializable {
 
     public void setListSub(Vector<Subject> listSub) {
         this.listSub = listSub;
+    }
+
+    public Vector<Course> getListCourse() {
+        return listCourse;
+    }
+
+    public void setListCourse(Vector<Course> listCourse) {
+        this.listCourse = listCourse;
     }
 }

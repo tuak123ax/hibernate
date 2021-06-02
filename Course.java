@@ -7,10 +7,11 @@ public class Course implements Serializable {
     private String GV;
     private String phongHoc;
     private String dayofWeek;
-    private String Ca;
+    private int Ca;
     private int maxSlot;
+
     public Course(){}
-    public Course(String maMon,String tenMon,int soTinChi,String GV,String phongHoc,String dayofWeek,String Ca,int maxSlot)
+    public Course(String maMon,String tenMon,int soTinChi,String GV,String phongHoc,String dayofWeek,int Ca,int maxSlot)
     {
         this.maMon=maMon;
         this.tenMon=tenMon;
@@ -70,11 +71,11 @@ public class Course implements Serializable {
         this.dayofWeek = dayofWeek;
     }
 
-    public String getCa() {
+    public int getCa() {
         return Ca;
     }
 
-    public void setCa(String ca) {
+    public void setCa(int ca) {
         Ca = ca;
     }
 
