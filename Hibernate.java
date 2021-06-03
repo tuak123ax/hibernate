@@ -272,6 +272,7 @@ public class Hibernate {
         Vector<HocSinh> finalStdList8 = stdList;
         Vector<HocSinh> finalStdList9 = stdList;
         Vector<Course> finalCourseList5 = courseList;
+        Vector<Course> finalCourseList6 = courseList;
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2417,7 +2418,7 @@ public class Hibernate {
                                             Header.add("Phòng học");
                                             Header.add("Ngày học");
                                             Header.add("Ca");
-                                            Header.add("Số slot tối đa");
+                                            Header.add("Số lượng");
                                             Vector data = new Vector();
                                             for (int ii = 0; ii < finalCourseList.size(); ii++) {
                                                 Vector temp = new Vector();
@@ -2663,10 +2664,106 @@ public class Hibernate {
                                                 }
                                             });
                                             JPanel southPanel = new JPanel();
-
+                                            JButton listStudent=new JButton("Sinh viên đã đăng ký");
+                                            listStudent.setIcon(new ImageIcon("list.png"));
+                                            listStudent.addActionListener(new ActionListener() {
+                                                @Override
+                                                public void actionPerformed(ActionEvent e) {
+                                                    if(e.getSource()==listStudent)
+                                                    {
+                                                        if(table.getSelectedRow()<0)
+                                                        {
+                                                            JOptionPane.showMessageDialog(null,"Hãy chọn học phần cần xem!");
+                                                        }
+                                                        else
+                                                        {
+                                                            JFrame frame1=new JFrame();
+                                                            frame1.setSize(1000,1000);
+                                                            frame1.setTitle("Sinh viên đã đăng ký");
+                                                            frame1.setVisible(true);
+                                                            frame1.setIconImage(new ImageIcon("list.png").getImage());
+                                                            frame1.setResizable(false);
+                                                            JPanel mainPan=new JPanel();
+                                                            BorderLayout borderLayout1=new BorderLayout();
+                                                            mainPan.setLayout(borderLayout1);
+                                                            JLabel label=new JLabel("Sinh viên đăng ký");
+                                                            label.setHorizontalAlignment(0);
+                                                            mainPan.add(label,BorderLayout.NORTH);
+                                                            Vector tieuDe=new Vector();
+                                                            tieuDe.add("Mã sinh viên");
+                                                            tieuDe.add("Họ tên");
+                                                            tieuDe.add("Mã môn");
+                                                            tieuDe.add("Tên môn");
+                                                            tieuDe.add("Giáo viên");
+                                                            tieuDe.add("Thời gian học");
+                                                            tieuDe.add("Thời gian DKHP");
+                                                            int vitri=table.getSelectedRow();
+                                                            Course tempCourse=finalCourseList5.get(vitri);
+                                                            String tgHoc="";
+                                                            if(tempCourse.getCa()==1)
+                                                            {
+                                                                tgHoc+="7:30-9:30";
+                                                            }
+                                                            if(tempCourse.getCa()==2)
+                                                            {
+                                                                tgHoc+="9:30-11:30";
+                                                            }
+                                                            if(tempCourse.getCa()==3)
+                                                            {
+                                                                tgHoc+="13:30-15:30";
+                                                            }
+                                                            if(tempCourse.getCa()==4)
+                                                            {
+                                                                tgHoc+="15:30-17:30";
+                                                            }
+                                                            Vector<HocSinh>HSDK=new Vector<>();
+                                                            for(int kk=0;kk<finalStdList9.size();kk++)
+                                                            {
+                                                                int listsize;
+                                                                if(finalStdList9.get(kk).getListCourse()==null) listsize=0;
+                                                                else{listsize=finalStdList9.get(kk).getListCourse().size();}
+                                                                for(int kkk=0;kkk<listsize;kkk++)
+                                                                {
+                                                                    if(tempCourse.getMaMon().equals(finalStdList9.get(kk).getListCourse().get(kkk).getMaMon()))
+                                                                    {
+                                                                        HSDK.add(finalStdList9.get(kk));
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            }
+                                                            Vector data=new Vector();
+                                                            for(int i1=0;i1<HSDK.size();i1++)
+                                                            {
+                                                                Vector dt=new Vector();
+                                                                dt.add(HSDK.get(i1).getMHS());
+                                                                dt.add(HSDK.get(i1).getTenHS());
+                                                                dt.add(tempCourse.getMaMon());
+                                                                dt.add(tempCourse.getTenMon());
+                                                                dt.add(tempCourse.getGV());
+                                                                dt.add(tgHoc);
+                                                                for(int i2=0;i2<HSDK.get(i1).getListCourse().size();i2++)
+                                                                {
+                                                                    if(HSDK.get(i1).getListCourse().get(i2).getMaMon().equals(tempCourse.getMaMon()))
+                                                                    {
+                                                                        dt.add(HSDK.get(i1).getTgDKHP().get(i2));
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                data.add(dt);
+                                                            }
+                                                            JTable jTable=new JTable(data,tieuDe);
+                                                            JScrollPane scrollPane=new JScrollPane(jTable);
+                                                            mainPan.add(scrollPane,BorderLayout.CENTER);
+                                                            frame1.add(mainPan);
+                                                            frame1.pack();
+                                                        }
+                                                    }
+                                                }
+                                            });
                                             southPanel.add(Search);
                                             southPanel.add(add);
                                             southPanel.add(delete);
+                                            southPanel.add(listStudent);
                                             centerPanel.add(sp);
                                             listFrame.add(listlabel, BorderLayout.NORTH);
                                             listFrame.add(centerPanel, BorderLayout.CENTER);
@@ -3150,6 +3247,17 @@ public class Hibernate {
                                                                                         {
                                                                                             t.add(finalCourseList5.get(posi));
                                                                                             JOptionPane.showMessageDialog(null,"Đăng ký thành công!");
+                                                                                            if(finalTemp5.getTgDKHP()==null)
+                                                                                            {
+                                                                                                finalTemp5.setTgDKHP(new Vector<>());
+                                                                                            }
+                                                                                            finalTemp5.getTgDKHP().add(String.valueOf(java.time.LocalDate.now()));
+                                                                                            try {
+                                                                                                LamTrangFile("DuLieuCourse.txt");
+                                                                                                GhiFileCourse(finalCourseList5);
+                                                                                            } catch (IOException ioException) {
+                                                                                                ioException.printStackTrace();
+                                                                                            }
                                                                                             finalTemp5.setListCourse(t);
                                                                                             for(int mm = 0; mm< finalStdList9.size(); mm++)
                                                                                             {
@@ -3246,7 +3354,6 @@ public class Hibernate {
                                                                 {
                                                                     kichthuoc=currentSemester[0].getDKHP().size();
                                                                 }
-                                                                System.out.println(kichthuoc);
                                                                 for(int c=0;c<kichthuoc;c++)
                                                                 {
                                                                     DateTime bd=currentSemester[0].getDKHP().get(c).getStart();
@@ -3254,18 +3361,22 @@ public class Hibernate {
                                                                     if(LonHon(day,month,year,bd.getDay(),bd.getMonth(),bd.getYear())&&
                                                                             NhoHon(day,month,year,kt.getDay(),kt.getMonth(),kt.getYear()))
                                                                     {
+                                                                        Vector<Course>tempCourse=finalTemp5.getListCourse();
+                                                                        Vector<String>tempDKHP=finalTemp5.getTgDKHP();
                                                                         KT=true;
                                                                         JOptionPane.showMessageDialog(null,"Delete thành công!");
                                                                         int position = table.getSelectedRow();
-                                                                        Vector<Course>tempCourse=finalTemp5.getListCourse();
+                                                                        tempDKHP.remove(position);
                                                                         tempCourse.remove(position);
                                                                         finalTemp5.setListCourse(tempCourse);
+                                                                        finalTemp5.setTgDKHP(tempDKHP);
                                                                         for(int b = 0; b< finalStdList8.size(); b++)
                                                                         {
                                                                             if(finalStdList8.get(b).getMHS()==finalTemp5.getMHS())
                                                                             {
                                                                                 finalStdList8.remove(b);
                                                                                 finalStdList8.add(b,finalTemp5);
+                                                                                break;
                                                                             }
                                                                         }
                                                                         Vector List = new Vector();

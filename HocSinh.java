@@ -8,8 +8,9 @@ public class HocSinh implements Serializable {
     private String Hinhanh;
     private String DiaChi;
     private String Lop;
-    Vector<Subject>listSub;
-    Vector<Course> listCourse;
+    private Vector<Subject>listSub;
+    private Vector<Course> listCourse;
+    private Vector<String>TgDKHP;
     private Account account;
     public HocSinh() {
 
@@ -46,7 +47,19 @@ public class HocSinh implements Serializable {
         this.listCourse=listCourse;
         this.account=account;
     }
-
+    public HocSinh(int MHS,String TenHS,float Diem,String Hinhanh,String DiaChi,String Lop,Vector<Subject>ListSub,Vector<Course>listCourse,Account account,Vector<String>tg )
+    {
+        this.MHS=MHS;
+        this.TenHS=TenHS;
+        this.Diem=Diem;
+        this.Hinhanh=Hinhanh;
+        this.DiaChi=DiaChi;
+        this.Lop=Lop;
+        this.listSub=ListSub;
+        this.listCourse=listCourse;
+        this.account=account;
+        this.TgDKHP=tg;
+    }
     public int getMHS() {
         return MHS;
     }
@@ -97,6 +110,14 @@ public class HocSinh implements Serializable {
 
     public Account getAccount() {
         return account;
+    }
+
+    public Vector<String> getTgDKHP() {
+        return TgDKHP;
+    }
+
+    public void setTgDKHP(Vector<String> tgDKHP) {
+        TgDKHP = tgDKHP;
     }
 
     public void setAccount(Account account) {
