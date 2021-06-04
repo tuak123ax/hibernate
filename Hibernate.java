@@ -83,7 +83,10 @@ public class Hibernate {
             tc2.setAccount(minh);
             Account hung=new Account("hung","hung","Student");
             Accounts.add(hung);
+            Account hau=new Account("hau","hau","Student");
+            Accounts.add(hau);
             stdList.get(1).setAccount(hung);
+            stdList.get(2).setAccount(hau);
             teacherList.add(tc1);
             teacherList.add(tc2);
         }
@@ -2754,6 +2757,73 @@ public class Hibernate {
                                                             JTable jTable=new JTable(data,tieuDe);
                                                             JScrollPane scrollPane=new JScrollPane(jTable);
                                                             mainPan.add(scrollPane,BorderLayout.CENTER);
+                                                            JButton Tim=new JButton("Search");
+                                                            Tim.setIcon(new ImageIcon("lupe.png"));
+                                                            String finalTgHoc = tgHoc;
+                                                            Tim.addActionListener(new ActionListener() {
+                                                                @Override
+                                                                public void actionPerformed(ActionEvent e) {
+                                                                    if(e.getSource()==Tim)
+                                                                    {
+                                                                        JFrame temp = new JFrame();
+                                                                        temp.setSize(300, 300);
+                                                                        temp.setVisible(true);
+                                                                        temp.setIconImage(new ImageIcon("lupe.png").getImage());
+                                                                        temp.setTitle("Search");
+                                                                        JPanel panel = new JPanel();
+                                                                        JLabel label = new JLabel("Mã sinh viên:");
+                                                                        panel.setLayout(new FlowLayout());
+                                                                        JTextField jTextField = new JTextField();
+                                                                        jTextField.setPreferredSize(new Dimension(300, 30));
+                                                                        panel.add(label);
+                                                                        panel.add(jTextField);
+                                                                        JPanel bigPanel = new JPanel();
+                                                                        bigPanel.add(panel);
+                                                                        JButton but = new JButton("Search");
+                                                                        but.addActionListener(new ActionListener() {
+                                                                            @Override
+                                                                            public void actionPerformed(ActionEvent e) {
+                                                                                if (e.getSource() == but) {
+                                                                                    int ma = Integer.parseInt(jTextField.getText());
+                                                                                    boolean check = false;
+                                                                                    for (int i3 = 0; i3 < data.size(); i3++) {
+                                                                                        Vector tm= (Vector) data.get(i3);
+                                                                                        if (ma ==(int)tm.get(0)) {
+                                                                                            check = true;
+                                                                                            Vector infomation = new Vector();
+                                                                                            Vector phu=new Vector();
+                                                                                            phu.add(HSDK.get(i3).getMHS());
+                                                                                            phu.add(HSDK.get(i3).getTenHS());
+                                                                                            phu.add(tempCourse.getMaMon());
+                                                                                            phu.add(tempCourse.getTenMon());
+                                                                                            phu.add(tempCourse.getGV());
+                                                                                            phu.add(finalTgHoc);
+                                                                                            for(int i4=0;i4<HSDK.get(i3).getListCourse().size();i4++)
+                                                                                            {
+                                                                                                if(HSDK.get(i3).getListCourse().get(i4).getMaMon().equals(tempCourse.getMaMon()))
+                                                                                                {
+                                                                                                    phu.add(HSDK.get(i3).getTgDKHP().get(i4));
+                                                                                                    break;
+                                                                                                }
+                                                                                            }
+                                                                                            infomation.add(phu);
+                                                                                            jTable.setModel(new DefaultTableModel(infomation,tieuDe));
+                                                                                            break;
+                                                                                        }
+                                                                                    }
+                                                                                    if (check == false) {
+                                                                                        JOptionPane.showMessageDialog(null, "Không tìm thấy sinh viên!");
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                        bigPanel.add(but);
+                                                                        temp.add(bigPanel);
+                                                                        temp.pack();
+                                                                    }
+                                                                }
+                                                            });
+                                                            mainPan.add(Tim,BorderLayout.SOUTH);
                                                             frame1.add(mainPan);
                                                             frame1.pack();
                                                         }
